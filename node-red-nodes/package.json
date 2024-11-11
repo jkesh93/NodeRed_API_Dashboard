@@ -1,0 +1,20 @@
+{
+    "name": "node-red-contrib-api-manager",
+    "version": "1.0.0",
+    "description": "API Manager nodes for Node-RED",
+    "dependencies": {
+        "axios": "^0.24.0"
+    },
+    "node-red": {
+        "nodes": {
+            "api-manager": "api-manager.js"
+        }
+    },
+    "main": "api-manager.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

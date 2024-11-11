@@ -1,0 +1,155 @@
+[
+    {
+        "id": "53042204096f3d5d",
+        "type": "tab",
+        "label": "AI Support Dashboard",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "89c1e8b7.965358",
+        "type": "ui_tab",
+        "name": "AI Support",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "17fb37aa.b7a8e8",
+        "type": "ui_group",
+        "name": "Ask AI",
+        "tab": "89c1e8b7.965358",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "f733e5c50d108023",
+        "type": "ui_form",
+        "z": "53042204096f3d5d",
+        "name": "Question Form",
+        "label": "",
+        "group": "17fb37aa.b7a8e8",
+        "order": 0,
+        "width": "12",
+        "height": "4",
+        "options": [
+            {
+                "label": "Enter your question",
+                "value": "question",
+                "type": "text",
+                "required": true,
+                "rows": 2
+            }
+        ],
+        "formValue": {
+            "question": ""
+        },
+        "payload": "",
+        "submit": "Ask AI",
+        "cancel": "Cancel",
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "b062153d00f1d5ae"
+            ]
+        ]
+    },
+    {
+        "id": "b062153d00f1d5ae",
+        "type": "function",
+        "z": "53042204096f3d5d",
+        "name": "Format Question",
+        "func": "msg.payload = {\n    \"question\": msg.payload.question\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 120,
+        "wires": [
+            [
+                "91e8926d8b4ed13b"
+            ]
+        ]
+    },
+    {
+        "id": "91e8926d8b4ed13b",
+        "type": "ai-query",
+        "z": "53042204096f3d5d",
+        "name": "AI Query",
+        "x": 460,
+        "y": 120,
+        "wires": [
+            [
+                "2c8b259c68fc5b46"
+            ]
+        ]
+    },
+    {
+        "id": "2c8b259c68fc5b46",
+        "type": "function",
+        "z": "53042204096f3d5d",
+        "name": "Format Response",
+        "func": "if (msg.payload && msg.payload.status === 'success') {\n    const response = msg.payload.response;\n    const now = new Date();\n    const timestamp = now.toISOString().split('T')[0];\n    \n    const markdown = `# AI Response\n\nGenerated on: ${timestamp}\n\n## Question\n${msg.payload.question}\n\n## Answer\n${response}\n\n---\n\n*Generated using API Manager AI Tool*`;\n    \n    msg.payload = markdown;\n    msg.filename = `ai_response_${timestamp}.md`;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 120,
+        "wires": [
+            [
+                "8a77b6f2d1189f4e",
+                "4a74b2bc641645aa"
+            ]
+        ]
+    },
+    {
+        "id": "8a77b6f2d1189f4e",
+        "type": "ui_template",
+        "z": "53042204096f3d5d",
+        "group": "17fb37aa.b7a8e8",
+        "name": "Display Response",
+        "order": 1,
+        "width": "12",
+        "height": "8",
+        "format": "<div style=\"white-space: pre-wrap; font-family: monospace;\">\n{{msg.payload}}\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 810,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4a74b2bc641645aa",
+        "type": "debug",
+        "z": "53042204096f3d5d",
+        "name": "Debug Output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 180,
+        "wires": []
+    }
+]
